@@ -34,22 +34,20 @@
         </div>
     </div>
 
-
-
     <script>
         async function register() {
             // 1. Отримуємо дані з полів за допомогою id
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Проста перевірка на заповненість
+            // Перевірка на заповненість
             if (!username || !password) {
                 alert("Please fill in all fields!");
                 return;
             }
 
             try {
-                // 2. Відправляємо POST-запит на ваш FastAPI
+                // 2. Відправляємо POST-запит на ваш FastAPI (порт 8000)
                 const response = await fetch('http://127.0.0.1:8000/user', {
                     method: 'POST',
                     headers: {
@@ -65,18 +63,15 @@
 
                 // 3. Обробка відповіді від сервера
                 if (response.ok) {
-                    // Зберігаємо ім'я користувача в браузері (session storage)
+                    // Зберігаємо ім'я користувача, щоб сайт його пам'ятав
                     localStorage.setItem('currentUser', username);
-
-                    // Перенаправляємо на сторінку успіху
                     window.location.href = 'success.html';
                 } else {
-                    // Якщо сервер повернув помилку (наприклад, юзер вже існує)
                     alert("Error: " + (data.detail || "Registration failed"));
                 }
             } catch (error) {
                 console.error("Connection error:", error);
-                alert("Cannot connect to server. Is FastAPI running?");
+                alert("Cannot connect to server. Is FastAPI running on port 8000?");
             }
         }
     </script>
