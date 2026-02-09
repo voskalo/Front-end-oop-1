@@ -16,60 +16,64 @@
     <div class="auth-container">
         <div class="auth-box">
             <h1>Let's make your profile</h1>
+
             <div class="input-group">
-                <label>Enter your nickname</label>
-                <input type="text" placeholder="New Nickname">
+                <label for="username">Enter your nickname</label>
+                <input type="text" id="username" placeholder="New Nickname">
             </div>
+
             <div class="input-group">
-                <label>Enter password</label>
-                <input type="password" placeholder="Create Password">
+                <label for="password">Enter password</label>
+                <input type="password" id="password" placeholder="Create Password">
             </div>
+
             <div class="auth-buttons">
                 <a href="login.html" class="btn-alt">I have an account</a>
-                <a href="success.html" class="btn-main">Enter</a>
+                <button onclick="register()" class="btn-main" style="cursor: pointer; border: none;">Enter</button>
             </div>
         </div>
     </div>
+
     <script>
-        const submitBtn = document.querySelector('.btn-main');
+        async function register() {
+            // 1. Отримуємо дані з полів за допомогою id
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-        submitBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-
-            // Беремо дані з твоїх інпутів
-            const nickname = document.querySelector('input[placeholder*="Nickname"]').value;
-            const password = document.querySelector('input[placeholder*="Password"]').value;
-
-            if (!nickname || !password) {
-                alert("Заповніть поля!");
+            // Перевірка на заповненість
+            if (!username || !password) {
+                alert("Please fill in all fields!");
                 return;
             }
 
             try {
-                // URL змінено на /user/registration згідно зі схемою
-                const response = await fetch('http://127.0.0.1:5000/user/registration', {
+                // 2. Відправляємо POST-запит на ваш FastAPI (порт 8000)
+                const response = await fetch('http://127.0.0.1:8000/user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        username: nickname, // Ключі згідно зі схемою: username, password
+                        username: username,
                         password: password
                     })
                 });
 
-                const result = await response.json();
+                const data = await response.json();
 
-                if (response.status === 201 || response.ok) {
+                // 3. Обробка відповіді від сервера
+                if (response.ok) {
+                    // Зберігаємо ім'я користувача, щоб сайт його пам'ятав
+                    localStorage.setItem('currentUser', username);
                     window.location.href = 'success.html';
                 } else {
-                    alert("Помилка: " + result.message);
+                    alert("Error: " + (data.detail || "Registration failed"));
                 }
             } catch (error) {
-                console.error("Помилка:", error);
-                alert("Сервер не відповідає!");
+                console.error("Connection error:", error);
+                alert("Cannot connect to server. Is FastAPI running on port 8000?");
             }
-        });
+        }
     </script>
 </body>
 </html>
