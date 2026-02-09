@@ -26,20 +26,6 @@
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-
-        .dev-box {
-            background-color: var(--panel-bg);
-            padding: 50px;
-            border-radius: 30px;
-            border: 1px solid rgba(184, 59, 136, 0.3);
-            max-width: 600px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-        }
 
         .dev-box h1 {
             font-size: 2.5rem;
@@ -75,6 +61,35 @@
             0%, 80%, 100% { transform: scale(0); }
             40% { transform: scale(1.0); }
         }
+
+        .dev-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--accent-pink), #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            /* Додаємо властивості для анімації */
+            display: inline-block; /* Обов'язково для роботи трансформацій */
+            animation: rotate-and-pulse 4s linear infinite;
+        }
+
+        /* Об'єднана анімація: обертання на 360 градусів + легка пульсація */
+        @keyframes rotate-and-pulse {
+            0% {
+                transform: rotate(0deg) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: rotate(180deg) scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+                opacity: 0.8;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -85,7 +100,6 @@
                 <li><a href="index.html#popular">Popular</a></li>
                 <li><a href="index.html#about">About</a></li>
                 <li><a href="index.html#contacts">Contacts</a></li>
-                <li><a href="friends.html">Friends</a></li>
             </ul>
             <div class="user-menu">
                 <div class="avatar" style="width: 30px; height: 30px;"></div>
@@ -96,8 +110,8 @@
     <div class="dev-container">
         <div class="dev-box">
             <div class="dev-icon">⚙️</div>
-            <h1>Розділ у розробці</h1>
-            <p>Ми саме зараз працюємо над тим, щоб додати цей контент до <strong>MovieMatch</strong>. Поверніться трохи пізніше!</p>
+            <h1>This chapter is in progress</h1>
+            <p>We are workibg on <strong>MovieMatch</strong>. Please return back a bit later !</p>
 
             <div class="loader-dots">
                 <div class="dot"></div>
@@ -105,7 +119,7 @@
                 <div class="dot"></div>
             </div>
 
-            <a href="index.html" class="btn-choose">На головну</a>
+            <a href="index.html" class="btn-choose">Main page</a>
         </div>
     </div>
 </body>

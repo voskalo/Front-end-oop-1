@@ -30,5 +30,49 @@
             </div>
         </div>
     </div>
+    <script>
+        const submitBtn = document.querySelector('.btn-main');
+
+        submitBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            // Отримуємо значення, враховуючи великі літери в placeholder
+            const nickname = document.querySelector('input[placeholder*="Nickname"]').value;
+            const password = document.querySelector('input[placeholder*="Password"]').value;
+
+            if (!nickname || !password) {
+                alert("Будь ласка, заповніть усі поля!");
+                return;
+            }
+
+            const userData = {
+                username: nickname,
+                password: password,
+                date: new Date().toLocaleString()
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/save-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Краще спершу на сторінку успіху
+                    window.location.href = 'success.html';
+                } else {
+                    alert("Помилка: " + result.message);
+                }
+            } catch (error) {
+                console.error("Помилка:", error);
+                alert("Сервер Python не запущений!");
+            }
+        });
+    </script>
 </body>
 </html>
