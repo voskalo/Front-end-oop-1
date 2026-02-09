@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMatch - Coming Soon</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dev-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 20px;
+            min-height: 70vh;
+        }
+
+        .dev-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--accent-pink), #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        .dev-box {
+            background-color: var(--panel-bg);
+            padding: 50px;
+            border-radius: 30px;
+            border: 1px solid rgba(184, 59, 136, 0.3);
+            max-width: 600px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .dev-box h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .dev-box p {
+            color: var(--text-sec);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .loader-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent-pink);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="top-nav">
+            <a href="index.html" class="logo">MovieMatch</a>
+            <ul class="nav-links">
+                <li><a href="index.html#popular">Popular</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#contacts">Contacts</a></li>
+                <li><a href="friends.html">Friends</a></li>
+            </ul>
+            <div class="user-menu">
+                <div class="avatar" style="width: 30px; height: 30px;"></div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="dev-container">
+        <div class="dev-box">
+            <div class="dev-icon">⚙️</div>
+            <h1>Розділ у розробці</h1>
+            <p>Ми саме зараз працюємо над тим, щоб додати цей контент до <strong>MovieMatch</strong>. Поверніться трохи пізніше!</p>
+
+            <div class="loader-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <a href="index.html" class="btn-choose">На головну</a>
+        </div>
+    </div>
+</body>
+</html>
