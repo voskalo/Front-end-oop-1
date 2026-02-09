@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "title": "Interstellar",
+        "desc": "Група дослідників вирушає у подорож крізь червоточину, щоб врятувати людство від вимирання на Землі.",
+        "img": "https://images.vfl.ru/ii/1604519961/447a760d/32185599.jpg",
+        "actors": ["Matthew McConaughey", "Anne Hathaway", "Jessica Chastain"]
+    },
+    {
+        "id": 2,
+        "title": "The Dark Knight",
+        "desc": "Бетмен піднімає ставки у боротьбі зі злочинністю, намагаючись зупинити хаотичного та небезпечного Джокера.",
+        "img": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg",
+        "actors": ["Christian Bale", "Heath Ledger", "Aaron Eckhart"]
+    },
+    {
+        "id": 3,
+        "title": "Barbie",
+        "desc": "Барбі переживає екзистенційну кризу і вирушає зі свого рожевого світу в реальність, щоб знайти відповіді.",
+        "img": "https://m.media-amazon.com/images/M/MV5BNjU3N2QxNzYtMjk1NC00MTc4LTk1NTQtMmUxN2IyNjYwZGQ5XkEyXkFqcGdeQXVyOTgxOTIzMTY@._V1_.jpg",
+        "actors": ["Margot Robbie", "Ryan Gosling", "America Ferrera"]
+    }
+]

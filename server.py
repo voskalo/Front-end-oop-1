@@ -39,5 +39,17 @@ def register_user():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+
+@app.route('/movies', methods=['GET'])
+def get_movies():
+    try:
+        with open('movies.json', 'r', encoding='utf-8') as f:
+            movies = json.load(f)
+        return jsonify(movies)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

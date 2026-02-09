@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMatch - Choose Movie</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .choose-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+            padding: 40px;
+            perspective: 1500px;
+            overflow: hidden;
+        }
+
+        .movie-card-big {
+            display: flex;
+            gap: 40px;
+            background: rgba(36, 30, 56, 0.85);
+            backdrop-filter: blur(25px);
+            padding: 50px;
+            border-radius: 40px;
+            border: 1px solid rgba(184, 59, 136, 0.4);
+            width: 75%;
+            max-width: 1400px;
+            min-height: 650px;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        /* Клас для центрування фінального екрану */
+        .movie-card-big.finished {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Tinder Анімації */
+        .swipe-like { transform: translateX(200%) rotate(45deg) !important; opacity: 0 !important; }
+        .swipe-dislike { transform: translateX(-200%) rotate(-45deg) !important; opacity: 0 !important; }
+        .new-card-anim { animation: fadeInScale 0.5s ease-out; }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .col-side { flex: 1; color: var(--text-sec); font-size: 1.1rem; line-height: 1.7; display: flex; flex-direction: column; justify-content: center; }
+        .col-center { flex: 1.2; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        .movie-main-img {
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+
+        #movie-title { font-size: 2.5rem; margin-bottom: 20px; color: white; font-weight: 800; }
+        .controls { display: flex; justify-content: center; gap: 30px; margin-top: 20px; }
+
+        .btn-circle {
+            width: 75px; height: 75px; border-radius: 50%; border: none; cursor: pointer;
+            font-size: 30px; display: flex; align-items: center; justify-content: center;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: white;
+        }
+        .btn-dislike { background: #4a4a6a; }
+        .btn-like { background: var(--accent-pink); }
+        .btn-circle:hover { transform: scale(1.15); }
+
+        .actors-list { list-style: none; padding: 0; }
+        .actors-list li { margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+        .dot { color: var(--accent-pink); font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav style="background: #0a0a0e; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; font-size: 1.5rem;">MovieMatch</a>
+            <div style="color: white; display: flex; align-items: center; gap: 10px;">
+                <span>You</span>
+                <div style="width: 35px; height: 35px; background: var(--accent-pink); border-radius: 50%;"></div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="choose-wrapper">
+        <div class="movie-card-big" id="main-card">
+            <div class="col-side" id="left-col">
+                <h3 style="color: white; margin-bottom: 20px;">Overview</h3>
+                <p id="movie-desc">Завантаження...</p>
+            </div>
+
+            <div class="col-center" id="center-col">
+                <img src="" alt="" class="movie-main-img" id="movie-img">
+                <h2 id="movie-title">Title</h2>
+                <div class="controls" id="movie-controls">
+                    <button class="btn-circle btn-dislike" onclick="handleSwipe('dislike')">✖</button>
+                    <button class="btn-circle btn-like" onclick="handleSwipe('like')">❤</button>
+                </div>
+            </div>
+
+            <div class="col-side" id="right-col">
+                <h3 style="color: white; margin-bottom: 20px;">Top Cast</h3>
+                <ul id="movie-actors" class="actors-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let movies = [];
+        let index = 0;
+
+        async function fetchMovies() {
+            try {
+                const res = await fetch('http://127.0.0.1:5000/movies');
+                movies = await res.json();
+                renderMovie();
+            } catch (e) {
+                document.getElementById('movie-desc').innerText = "Сервер не підключено.";
+            }
+        }
+
+        function renderMovie() {
+            const card = document.getElementById('main-card');
+
+            if (index >= movies.length) {
+                // ПОВНЕ ЦЕНТРУВАННЯ ФІНАЛУ
+                card.classList.add('finished');
+                card.innerHTML = `
+                    <div style="animation: fadeInScale 0.5s ease-out;">
+                        <h1 style="color: white; font-size: 3.5rem; margin-bottom: 20px;">That's all for now!</h1>
+                        <p style="color: #a0a0b0; font-size: 1.2rem; margin-bottom: 40px; max-width: 500px;">
+                            That's all of films that we had.
+                        </p>
+                        <a href="index.html" style="text-decoration: none; padding: 15px 40px; background: var(--accent-pink); color: white; border-radius: 30px; font-weight: bold;">
+                            Back to Home
+                        </a>
+                    </div>`;
+                return;
+            }
+
+            const m = movies[index];
+            document.getElementById('movie-title').innerText = m.title;
+            document.getElementById('movie-desc').innerText = m.desc;
+            document.getElementById('movie-img').src = m.img;
+            document.getElementById('movie-actors').innerHTML = m.actors.map(a =>
+                `<li><span class="dot">•</span> ${a}</li>`).join('');
+        }
+
+        function handleSwipe(type) {
+            const card = document.getElementById('main-card');
+            if (!movies[index]) return;
+
+            // Просто додаємо анімацію і змінюємо індекс (без запитів до JSON)
+            card.classList.add(type === 'like' ? 'swipe-like' : 'swipe-dislike');
+
+            setTimeout(() => {
+                index++;
+                card.classList.remove('swipe-like', 'swipe-dislike');
+                card.classList.add('new-card-anim');
+                renderMovie();
+                setTimeout(() => card.classList.remove('new-card-anim'), 500);
+            }, 500);
+        }
+
+        fetchMovies();
+    </script>
+</body>
+</html>
