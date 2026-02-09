@@ -16,19 +16,69 @@
     <div class="auth-container">
         <div class="auth-box">
             <h1>Let's make your profile</h1>
+
             <div class="input-group">
-                <label>Enter your nickname</label>
-                <input type="text" placeholder="New Nickname">
+                <label for="username">Enter your nickname</label>
+                <input type="text" id="username" placeholder="New Nickname">
             </div>
+
             <div class="input-group">
-                <label>Enter password</label>
-                <input type="password" placeholder="Create Password">
+                <label for="password">Enter password</label>
+                <input type="password" id="password" placeholder="Create Password">
             </div>
+
             <div class="auth-buttons">
                 <a href="login.html" class="btn-alt">I have an account</a>
-                <a href="success.html" class="btn-main">Enter</a>
+                <button onclick="register()" class="btn-main" style="cursor: pointer; border: none;">Enter</button>
             </div>
         </div>
     </div>
+
+
+
+    <script>
+        async function register() {
+            // 1. Отримуємо дані з полів за допомогою id
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Проста перевірка на заповненість
+            if (!username || !password) {
+                alert("Please fill in all fields!");
+                return;
+            }
+
+            try {
+                // 2. Відправляємо POST-запит на ваш FastAPI
+                const response = await fetch('http://127.0.0.1:8000/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                // 3. Обробка відповіді від сервера
+                if (response.ok) {
+                    // Зберігаємо ім'я користувача в браузері (session storage)
+                    localStorage.setItem('currentUser', username);
+
+                    // Перенаправляємо на сторінку успіху
+                    window.location.href = 'success.html';
+                } else {
+                    // Якщо сервер повернув помилку (наприклад, юзер вже існує)
+                    alert("Error: " + (data.detail || "Registration failed"));
+                }
+            } catch (error) {
+                console.error("Connection error:", error);
+                alert("Cannot connect to server. Is FastAPI running?");
+            }
+        }
+    </script>
 </body>
 </html>
