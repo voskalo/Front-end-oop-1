@@ -36,41 +36,38 @@
         submitBtn.addEventListener('click', async (e) => {
             e.preventDefault();
 
-            // Отримуємо значення, враховуючи великі літери в placeholder
+            // Беремо дані з твоїх інпутів
             const nickname = document.querySelector('input[placeholder*="Nickname"]').value;
             const password = document.querySelector('input[placeholder*="Password"]').value;
 
             if (!nickname || !password) {
-                alert("Будь ласка, заповніть усі поля!");
+                alert("Заповніть поля!");
                 return;
             }
 
-            const userData = {
-                username: nickname,
-                password: password,
-                date: new Date().toLocaleString()
-            };
-
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/save-user', {
+                // URL змінено на /user/registration згідно зі схемою
+                const response = await fetch('http://127.0.0.1:5000/user/registration', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(userData)
+                    body: JSON.stringify({
+                        username: nickname, // Ключі згідно зі схемою: username, password
+                        password: password
+                    })
                 });
 
                 const result = await response.json();
 
-                if (response.ok) {
-                    // Краще спершу на сторінку успіху
+                if (response.status === 201 || response.ok) {
                     window.location.href = 'success.html';
                 } else {
                     alert("Помилка: " + result.message);
                 }
             } catch (error) {
                 console.error("Помилка:", error);
-                alert("Сервер Python не запущений!");
+                alert("Сервер не відповідає!");
             }
         });
     </script>

@@ -1,40 +1,43 @@
-'''Backend module'''
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 import os
 
 app = Flask(__name__)
-CORS(app)  # Дозволяємо запити з браузера
+CORS(app)
 
-# Шлях до файлу, куди будемо зберігати дані
 DB_FILE = 'users_data.json'
 
-@app.route('/api/save-user', methods=['POST'])
-def save_user():
+# Змінено відповідно до твоєї схеми
+@app.route('/user/registration', methods=['POST'])
+def register_user():
     try:
-        # Отримуємо дані від JavaScript
         user_data = request.json
+        # Очікуємо username та password згідно зі схемою
+        username = user_data.get('username')
+        password = user_data.get('password')
 
-        # Перевіряємо, чи існує файл. Якщо так — зчитуємо старі дані
+        if not username or not password:
+            return jsonify({"status": "error", "message": "Missing fields"}), 400
+
         if os.path.exists(DB_FILE):
             with open(DB_FILE, 'r', encoding='utf-8') as f:
                 data_list = json.load(f)
         else:
             data_list = []
 
-        # Додаємо нового користувача до списку
-        data_list.append(user_data)
+        data_list.append({
+            "username": username,
+            "password": password
+        })
 
-        # Записуємо оновлений список назад у JSON файл
         with open(DB_FILE, 'w', encoding='utf-8') as f:
             json.dump(data_list, f, ensure_ascii=False, indent=4)
 
-        return jsonify({"status": "success", "message": "Дані збережено!"}), 200
+        return jsonify({"status": "success", "message": "User registered"}), 201
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
-    print("Сервер запущено! Очікую дані на http://127.0.0.1:5000")
     app.run(debug=True, port=5000)
