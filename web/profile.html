@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMatch - Friend's Library</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Список друзів */
+        .friends-sidebar {
+            background: rgba(36, 30, 56, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 40px;
+            border: 1px solid rgba(184, 59, 136, 0.3);
+            height: fit-content;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .friend-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .friend-item.active {
+            background: rgba(184, 59, 136, 0.2);
+            border-color: var(--accent-pink);
+        }
+
+        .avatar-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+        }
+
+        /* Контент з фільмами */
+        .movies-feed {
+            background: rgba(36, 30, 56, 0.5);
+            padding: 40px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feed-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .movie-card {
+            background: #1a162b;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.3s;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .movie-card:hover { transform: translateY(-5px); }
+        .movie-poster { width: 100%; height: 280px; object-fit: cover; }
+        .movie-info { padding: 15px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="top-nav">
+            <a href="index.html" class="logo">MovieMatch</a>
+            <ul class="nav-links">
+                <li><a href="friends.html">Friends</a></li>
+                <li><a href="my_films.html">My Collection</a></li>
+                <li><a href="profile.html" class="active">Profile</a></li>
+                <!-- вставити фільми та навігацію -->
+            </ul>
+        </nav>
+    </header>
+
+    <div class="profile-container">
+        <aside class="friends-sidebar">
+            <h2 style="margin-bottom: 20px;">Choose a Friend</h2>
+            <div id="friends-list">
+                </div>
+        </aside>
+
+        <main class="movies-feed">
+            <div class="feed-header">
+                <h1 id="selected-friend-name">Select a friend to see their likes</h1>
+                <p id="selected-friend-stats" style="color: var(--text-sec);"></p>
+            </div>
+
+            <div class="movies-grid" id="movies-container">
+                </div>
+        </main>
+    </div>
+
+    <script>
+        // Імітація бази даних друзів та їх вподобань
+        const data = {
+            "Alex_MovieBuff": [
+                { title: "Interstellar", img: "https://images.vfl.ru/ii/1604519961/447a760d/32185599.jpg", year: 2014 },
+                { title: "Inception", img: "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg", year: 2010 }
+            ],
+            "Sarah_Cine": [
+                { title: "Barbie", img: "https://m.media-amazon.com/images/M/MV5BNjU3N2QxNzYtMjk1NC00MTc4LTk1NTQtMmUxN2IyNjYwZGQ5XkEyXkFqcGdeQXVyOTgxOTIzMTY@._V1_.jpg", year: 2023 }
+            ],
+            "Max_Classic": [
+                { title: "The Dark Knight", img: "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg", year: 2008 },
+                { title: "Interstellar", img: "https://images.vfl.ru/ii/1604519961/447a760d/32185599.jpg", year: 2014 }
+            ]
+        };
+
+        const friendsList = document.getElementById('friends-list');
+        const moviesContainer = document.getElementById('movies-container');
+        const friendNameTitle = document.getElementById('selected-friend-name');
+
+        // Рендеримо список друзів
+        Object.keys(data).forEach(name => {
+            const div = document.createElement('div');
+            div.className = 'friend-item';
+            div.innerHTML = `
+                <div class="avatar-circle"></div>
+                <div style="font-weight: bold;">${name}</div>
+            `;
+            div.onclick = () => selectFriend(name, div);
+            friendsList.appendChild(div);
+        });
+
+        function selectFriend(name, element) {
+            // Підсвічуємо вибраного друга
+            document.querySelectorAll('.friend-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+
+            // Оновлюємо заголовок
+            friendNameTitle.innerText = `${name}'s Favorites`;
+            document.getElementById('selected-friend-stats').innerText = `${data[name].length} movies liked`;
+
+            // Очищуємо та рендеримо фільми саме цього друга
+            moviesContainer.innerHTML = '';
+            data[name].forEach(movie => {
+                const movieDiv = document.createElement('div');
+                movieDiv.className = 'movie-card';
+                movieDiv.innerHTML = `
+                    <img src="${movie.img}" class="movie-poster">
+                    <div class="movie-info">
+                        <div style="font-weight: bold;">${movie.title}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-sec);">${movie.year}</div>
+                    </div>
+                `;
+                moviesContainer.appendChild(movieDiv);
+            });
+        }
+    </script>
+</body>
+</html>
