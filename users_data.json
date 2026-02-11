@@ -58,5 +58,21 @@
     {
         "username": "1234567",
         "password": "12345678"
+    },
+    {
+        "username": "lubcik",
+        "password": "12345"
+    },
+    {
+        "username": "123",
+        "password": "1234"
+    },
+    {
+        "username": "123",
+        "password": "123"
+    },
+    {
+        "username": "Levko",
+        "password": "12345"
     }
 ]

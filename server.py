@@ -50,6 +50,32 @@ def get_movies():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/api/search-friends', methods=['GET'])
+def search_friends():
+    query = request.args.get('query', '').lower()
+    if not query:
+        return jsonify([])
+
+    try:
+        if os.path.exists(DB_FILE):
+            with open(DB_FILE, 'r', encoding='utf-8') as f:
+                users = json.load(f)
+
+            # Шукаємо користувачів, чиє ім'я містить запит (ігноруючи паролі)
+            results = [
+                {"username": u['username']}
+                for u in users
+                if query in u['username'].lower()
+            ]
+            return jsonify(results)
+        return jsonify([])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

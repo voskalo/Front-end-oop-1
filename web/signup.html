@@ -69,10 +69,11 @@
                 } else {
                     alert("Error: " + (data.detail || "Registration failed"));
                 }
-            } catch (error) {
-                console.error("Connection error:", error);
-                alert("Cannot connect to server. Is FastAPI running on port 8000?");
-            }
+            } catch (e) {
+        // Перенаправлення, якщо сталася помилка мережі (сервер недоступний)
+        window.location.href = 'error.html';
+    }
+
         }
     </script>
 </body>
