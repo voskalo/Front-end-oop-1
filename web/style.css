@@ -30,7 +30,6 @@ header {
 
 .top-nav {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 15px 40px;
 }
@@ -46,6 +45,7 @@ header {
     list-style: none;
     display: flex;
     gap: 30px;
+    margin-left: 450px;
 }
 
 .nav-links a {
@@ -65,16 +65,17 @@ header {
 .auth-lang a {
     color: var(--text-sec);
     text-decoration: none;
-    margin: 0 5px;
+    margin: 5px;
 }
 
 .active-lang {
     color: var(--accent-pink);
     font-weight: bold;
+    margin-right: 50px;
 }
 
 .auth-link {
-    margin-left: 15px;
+    margin-left: 40px;
     font-weight: bold;
     color: white !important;
 }
