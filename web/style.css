@@ -1,0 +1,269 @@
+:root {
+    --bg-dark: #121218;
+    --panel-bg: #241e38;
+    --accent-pink: #b83b88;
+    --accent-hover: #d64ca0;
+    --text-main: #ffffff;
+    --text-sec: #a0a0b0;
+    --nav-bg: #0a0a0e;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+}
+
+/* --- ШАПКА (HEADER) --- */
+header {
+    background-color: var(--nav-bg);
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+
+    /* ДОДАНО ДЛЯ ЗАКРІПЛЕННЯ: */
+    position: sticky;  /* Робить елемент "липким" */
+    top: 0;            /* Приклеює до самого верху екрана */
+    z-index: 1000;     /* Гарантує, що меню буде ПОВЕРХ усіх карток і текстів */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Легка тінь, щоб відділити меню від контенту */
+}
+
+.top-nav {
+    display: flex;
+    align-items: center;
+    padding: 15px 40px;
+    justify-content: space-between;
+    position: relative;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    /* align-content: space-between; */
+    display: flex;
+    gap: 30px;
+    /* margin-left: 450px; */
+    /* margin: auto */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+}
+
+.nav-links a {
+    color: var(--text-sec);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--text-main);
+}
+
+.auth-lang {
+    color: var(--text-sec);
+}
+
+.auth-lang a {
+    color: var(--text-sec);
+    text-decoration: none;
+    margin: 5px;
+}
+
+.active-lang {
+    color: var(--accent-pink);
+    font-weight: bold;
+    margin-right: 50px;
+}
+
+.auth-link {
+    margin-left: 40px;
+    font-weight: bold;
+    color: white !important;
+}
+
+/* --- ВАШЕ ДРУГЕ МЕНЮ (SUB-NAV) --- */
+.sub-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px 0;
+    border-top: 1px solid #222;
+    margin-top: 5px;
+}
+
+.sub-nav a {
+    color: var(--text-sec);
+    text-decoration: none;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.sub-nav a:hover {
+    color: var(--accent-pink);
+}
+
+/* --- HERO --- */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+    background: radial-gradient(circle at center, #2a2440 0%, var(--bg-dark) 80%);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.btn-choose {
+    background-color: var(--accent-pink);
+    color: white;
+    border: none;
+    padding: 15px 50px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.btn-choose:hover {
+    background-color: var(--accent-hover);
+    box-shadow: 0 0 15px var(--accent-pink);
+}
+
+/* --- КОНТЕЙНЕР І СЕКЦІЇ --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.section-title {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    color: white;
+    text-align: center;
+}
+
+.center {
+    text-align: center;
+}
+
+.text-block {
+    text-align: center;
+    color: var(--text-sec);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/* --- СІТКА ФІЛЬМІВ (POPULAR) --- */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    max-width: 100%
+}
+
+.movie-card {
+    background-color: var(--panel-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+}
+
+.movie-img {
+    height: 250px;
+    background: linear-gradient(45deg, #333, #555); /* Заглушка для фото */
+    width: 100%;
+}
+
+.movie-info {
+    padding: 15px;
+}
+
+.movie-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    color: white;
+}
+
+.movie-info p {
+    margin: 0;
+    color: var(--text-sec);
+    font-size: 0.8rem;
+}
+
+/* --- ВАШІ КОНТАКТИ (CONTACTS GRID) --- */
+.contacts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.contact-item {
+    background-color: var(--panel-bg);
+    padding: 20px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: 0.3s;
+}
+
+.contact-item:hover {
+    background-color: #312a4d;
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    background-color: var(--accent-pink);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.contact-card h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+}
+
+.contact-card .phone {
+    color: var(--accent-pink);
+    margin: 0 0 5px 0;
+    font-weight: bold;
+}
+
+.contact-card .desc {
+    color: var(--text-sec);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Стилі для сторінок авторизації (Login/Signup) */
+.auth-bg { min-height: 100vh; display: flex; flex-direction: column; }
+.auth-container { flex: 1; display: flex; justify-content: center; align-items: center; }
+.auth-box { background-color: var(--panel-bg); padding: 50px; border-radius: 20px; width: 350px; }
+.input-group label { display: block; margin-bottom: 8px; color: #ccc; }
+.input-group input { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #555; background: #1a162b; color: white; box-sizing: border-box;}
+.auth-buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+.btn-main { background-color: var(--accent-pink); color: white; padding: 10px 30px; border-radius: 20px; text-decoration: none; border: none; cursor: pointer; }
+.btn-alt { color: var(--text-sec); text-decoration: none; font-size: 0.9rem; }

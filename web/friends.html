@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMatch - Friends</title>
+    <style>
+        :root {
+            --bg-dark: #121218;
+            --panel-bg: #241e38;
+            --accent-pink: #b83b88;
+            --accent-hover: #d64ca0;
+            --text-main: #ffffff;
+            --text-sec: #a0a0b0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+        nav { background-color: #0a0a0e; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
+        .logo a { text-decoration: none; color: white; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .logo-box { width: 20px; height: 20px; background-color: #ddd; }
+        .nav-links { display: flex; gap: 30px; font-size: 0.9rem; }
+        .nav-links a { text-decoration: none; color: var(--text-sec); transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
+        .user-menu { display: flex; align-items: center; gap: 15px; }
+        .avatar { width: 30px; height: 30px; background-color: #ddd; border-radius: 50%; }
+
+        .container { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
+
+        .sidebar { width: 350px; background-color: var(--panel-bg); border-radius: 20px; padding: 25px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+        .sidebar h2 { font-size: 1.5rem; }
+        .add-friend-btn { background: transparent; border: 2px dashed var(--accent-pink); color: white; padding: 10px; border-radius: 12px; cursor: pointer; width: 100%; }
+        .add-friend-btn:hover { background-color: rgba(184, 59, 136, 0.1); }
+
+        .friend-card { background-color: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid transparent; }
+        .friend-card:hover { background-color: rgba(0,0,0,0.3); }
+        .friend-card.active { border-color: var(--accent-pink); background-color: rgba(184, 59, 136, 0.1); }
+        .friend-avatar { width: 50px; height: 50px; background-color: #ddd; border-radius: 50%; }
+        .friend-info { flex: 1; }
+        .view-btn { background-color: var(--accent-pink); color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+
+        .main-content { flex: 1; background-color: var(--panel-bg); border-radius: 20px; padding: 40px; overflow-y: auto; }
+        .movies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 25px; }
+        .movie-card { background-color: #1a162b; border-radius: 12px; overflow: hidden; }
+        .movie-poster { width: 100%; height: 270px; background-color: #333; display: flex; align-items: center; justify-content: center; }
+        .movie-info { padding: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <!-- <div class="logo-box"></div> -->
+            <a href="index.html">MovieMatch</a>
+        </div>
+        <div class="nav-links">
+            <a href="#">Popular</a>
+            <a href="#">About</a>
+            <a href="#">Contacts</a>
+            <a href="friends.html" class="active" style="color: var(--accent-pink);">Friends</a>
+            <a href="my_films.html">My Collection</a>
+        </div>
+        <div class="user-menu">
+            <span>You</span>
+            <div class="avatar"></div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Friends of Friends</h2>
+            <button class="add-friend-btn">+ Add Friend</button>
+
+            <div class="friend-card active">
+                <div class="friend-avatar"></div>
+                <div class="friend-info">
+                    <div style="font-weight: bold;">Alex_MovieBuff</div>
+                    <div style="font-size: 0.8rem; color: #aaa;">Suggested</div>
+                </div>
+                <button class="view-btn">View</button>
+            </div>
+
+             <div class="friend-card">
+                <div class="friend-avatar"></div>
+                <div class="friend-info">
+                    <div style="font-weight: bold;">Sarah_Cine</div>
+                    <div style="font-size: 0.8rem; color: #aaa;">Mutual</div>
+                </div>
+                <button class="view-btn">View</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <h1>Alex_MovieBuff's Favorites</h1>
+            <br>
+            <div class="movies-grid">
+                <div class="movie-card">
+                    <div class="movie-poster" style="background: linear-gradient(45deg, #4b6cb7, #182848);">Avengers</div>
+                    <div class="movie-info">Avengers</div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-poster" style="background: linear-gradient(45deg, #2C3E50, #000000);">Dark Knight</div>
+                    <div class="movie-info">Dark Knight</div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMatch - Реєстрація</title>
+    <style>
+        /* Стилі тут */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d122b; 
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Навігація */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+        }
+
+        .logo { font-size: 18px; font-weight: bold; }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .lang-switch { margin-left: 20px; border-left: 1px solid #444; padding-left: 20px; }
+
+        /* Картка форми */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background-color: #35254e; 
+            width: 100%;
+            max-width: 700px;
+            padding: 60px 40px;
+            border-radius: 60px; 
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: normal;
+            margin-bottom: 50px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 18px;
+            color: #ddd;
+        }
+
+        .input-group input {
+            width: 100%;
+            background-color: #d1d1d1; 
+            border: none;
+            padding: 18px;
+            border-radius: 4px;
+            font-size: 18px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        /* Кнопки */
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 120px;
+            margin-top: 50px;
+        }
+
+        .btn {
+            background-color: #8b3d7d; 
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+            min-width: 180px;
+        }
+
+        .btn:hover { opacity: 0.8; transform: scale(1.02); }
+
+        .btn-link {
+            font-size: 14px;
+            padding: 14px 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">MovieMatch</div>
+        <div class="nav-links">
+            <span>Popular</span>
+            <span>About</span>
+            <span>Contacts</span>
+            <div class="lang-switch">Укр | Eng</div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="auth-card">
+            <h1>Let’s make your profile</h1>
+
+            <form id="register-form">
+                <div class="input-group">
+                    <label>Enter your nickname</label>
+                    <input id="nickname" name="nickname" type="text" placeholder="...">
+                </div>
+
+                <div class="input-group">
+                    <label>Enter password</label>
+                    <input id="password" name="password" type="password" placeholder="...">
+                </div>
+
+                <div class="button-row">
+                    <a href="#" class="btn btn-link">I have an account</a>
+                    <button type="submit" class="btn">Enter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="JS_example.js"></script>
+</body>
+</html>

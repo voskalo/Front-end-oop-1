@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MovieMatch - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Скелетон-заглушка поки фільми вантажяться */
+        .movie-img.skeleton {
+            background: linear-gradient(90deg, #2a2440 25%, #352d50 50%, #2a2440 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+        }
+        @keyframes shimmer {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Постер як картинка */
+        .movie-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Рейтинг на картці */
+        .movie-rating {
+            display: inline-block;
+            background: rgba(184, 59, 136, 0.25);
+            color: var(--accent-pink);
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* User-меню коли залогінений */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+        .user-avatar-circle {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .user-name {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="top-nav">
+            <a href="index.html" class="logo">MovieMatch</a>
+
+            <ul class="nav-links">
+                <li><a href="#popular">Popular</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+            </ul>
+
+            <!-- Права частина навігації — міняється залежно від стану входу -->
+            <div class="auth-lang" id="nav-right">
+                <!-- Заповнюється через JS нижче -->
+            </div>
+        </nav>
+
+        <nav class="sub-nav">
+            <a href="index.html">Movies</a>
+            <a href="development.html">Books</a>
+            <a href="development.html">Cartoons</a>
+            <a href="development.html">Audiobooks</a>
+            <a href="development.html">Podcasts</a>
+            <a href="development.html">Playlists</a>
+            <a href="development.html">Show</a>
+            <a href="development.html">TV shows</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Select Movie</h1>
+            <a href="#" class="btn-choose" onclick="goToChoose()">Choose</a>
+        </div>
+    </section>
+
+    <main class="container">
+
+        <!-- Popular Movies -->
+        <section id="popular">
+            <h2 class="section-title">Popular Movies</h2>
+            <div class="movie-grid" id="movie-grid" style="grid-template-columns: repeat(5, 1fr);">
+                <!-- Скелетон-заглушки поки вантажиться -->
+            </div>
+        </section>
+
+        <!-- About -->
+        <section id="about">
+            <h2 class="section-title center">About Us</h2>
+            <p class="text-block">
+                MovieMatch is your personal guide to the world of cinema. We help you find the perfect movie for any mood.
+                Our algorithms analyze your preferences to give you the best suggestions.
+            </p>
+        </section>
+
+        <!-- Contacts -->
+        <section id="contacts">
+            <h2 class="section-title center">Contacts</h2>
+            <div class="contacts-grid" id="contacts-grid"></div>
+        </section>
+
+    </main>
+
+    <script>
+        const BASE_URL = 'http://127.0.0.1:8000';
+
+        // ─────────────────────────────────────────────────────
+        // 0. Кнопка Choose — перевіряємо токен
+        // ─────────────────────────────────────────────────────
+        function goToChoose() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                window.location.href = 'choose.html';
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 1. Навігація — перевіряємо токен
+        // ─────────────────────────────────────────────────────
+        function renderNav() {
+            const token    = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+            const navRight = document.getElementById('nav-right');
+
+            if (token && username) {
+                // Залогінений — показуємо кружечок з іменем
+                navRight.innerHTML = `
+                    <a href="my_films.html" class="user-menu">
+                        <span class="user-name">${username}</span>
+                        <div class="user-avatar-circle">
+                            ${username.charAt(0).toUpperCase()}
+                        </div>
+                    </a>
+                    <a href="#" onclick="logout()" class="auth-link"
+                       style="margin-left:15px; color:var(--text-sec); font-size:0.85rem;">
+                        Log out
+                    </a>`;
+            } else {
+                // Не залогінений — кнопки Sign Up / Log In
+                navRight.innerHTML = `
+                    <a href="development.html">Укр</a> | <span class="active-lang">Eng</span>
+                    <a href="signup.html" class="auth-link" style="color:var(--accent-pink) !important;">Sign Up</a>
+                    <a href="login.html"  class="auth-link">Log In</a>`;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            localStorage.removeItem('userId');
+            location.reload();
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 2. Скелетон-заглушки (показуємо поки вантажиться)
+        // ─────────────────────────────────────────────────────
+        function renderSkeletons(count = 12) {
+            const grid = document.getElementById('movie-grid');
+            grid.innerHTML = Array.from({ length: count }).map(() => `
+                <div class="movie-card">
+                    <div class="movie-img skeleton"></div>
+                    <div class="movie-info">
+                        <h3 style="background:#2a2440; color:transparent; border-radius:6px;">Loading title</h3>
+                        <p  style="background:#2a2440; color:transparent; border-radius:6px; width:60%;">2024</p>
+                    </div>
+                </div>`).join('');
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 3. Завантаження популярних фільмів
+        // GET /movies/ → { results: [{ title, poster_url, release_date, vote_average, genres_str }] }
+        // ─────────────────────────────────────────────────────
+        async function fetchMovies() {
+            renderSkeletons();
+
+            try {
+                const res  = await fetch(`${BASE_URL}/movies/`);
+                const data = await res.json();
+                const movies = (data.results || []).slice(0, 20); // беремо перші 20
+                renderMovies(movies);
+            } catch (e) {
+                // Сервер недоступний — залишаємо скелетони і показуємо повідомлення
+                document.getElementById('movie-grid').innerHTML = `
+                    <p style="color:var(--text-sec); grid-column:1/-1; text-align:center; padding:40px 0;">
+                        Could not connect to server.
+                        <br><br>
+                        <a href="javascript:fetchMovies()" style="color:var(--accent-pink);">Try again</a>
+                    </p>`;
+            }
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 4. Рендер карток фільмів
+        // ─────────────────────────────────────────────────────
+        function renderMovies(movies) {
+            const grid = document.getElementById('movie-grid');
+
+            if (!movies.length) {
+                grid.innerHTML = '<p style="color:var(--text-sec); grid-column:1/-1;">No movies found.</p>';
+                return;
+            }
+
+            grid.innerHTML = movies.map(m => {
+                // Рік з release_date: "2024-11-26" → "2024"
+                const year = m.release_date ? m.release_date.split('-')[0] : '—';
+
+                // Перший жанр або пусто
+                const genre = m.genres_str && m.genres_str.length ? m.genres_str[0] : '';
+
+                // Рейтинг
+                const rating = m.vote_average && m.vote_average > 0
+                    ? `<span class="movie-rating">★ ${m.vote_average.toFixed(1)}</span>`
+                    : '';
+
+                // Постер
+                const posterContent = m.poster_url
+                    ? `<img src="${m.poster_url}" alt="${m.title}" loading="lazy">`
+                    : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#333,#555);
+                        display:flex;align-items:center;justify-content:center;
+                        color:#888;font-size:0.8rem;padding:10px;text-align:center;">
+                        ${m.title}
+                       </div>`;
+
+                return `
+                <div class="movie-card" style="cursor:pointer;" onclick="window.location.href='choose.html'">
+                    <div class="movie-img">${posterContent}</div>
+                    <div class="movie-info">
+                        <h3>${m.title || 'Unknown'}</h3>
+                        <p>${genre ? genre + ' • ' : ''}${year}</p>
+                        ${rating}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 5. Контакти (статичні)
+        // ─────────────────────────────────────────────────────
+        function renderContacts() {
+            const names = [
+                "Voskalo Liubomyr",
+                "Anna Kravchenko",
+                "Tymyr Omelyanenko",
+                "Anna Liuklian"
+            ];
+            document.getElementById('contacts-grid').innerHTML = names.map(name => `
+                <div class="contact-item">
+                    <div class="avatar"></div>
+                    <div class="contact-card">
+                        <h3>${name}</h3>
+                        <p class="phone">+1 234 567 890</p>
+                        <p class="desc">Available 24/7</p>
+                    </div>
+                </div>`).join('');
+        }
+
+        // ─────────────────────────────────────────────────────
+        // Старт
+        // ─────────────────────────────────────────────────────
+        renderNav();
+        renderContacts();
+        fetchMovies();
+    </script>
+</body>
+</html>
