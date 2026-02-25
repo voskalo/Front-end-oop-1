@@ -1,3 +1,12 @@
+/* This forces the logo link to stay white at all times */
+.logo a,
+.logo a:visited,
+.logo a:hover,
+.logo a:active {
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
 :root {
     --bg-dark: #121218;
     --panel-bg: #241e38;
@@ -39,7 +48,7 @@ header {
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: white;
+    color: rgb(255, 255, 255);
     text-decoration: none;
 }
 
@@ -110,6 +119,39 @@ header {
 .sub-nav a:hover {
     color: var(--accent-pink);
 }
+
+
+
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.username {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.btn-signout {
+    background: transparent;
+    border: 1px solid var(--accent-pink);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: 0.3s;
+}
+
+.btn-signout:hover {
+    background: var(--accent-pink);
+}
+
+
+
+
 
 /* --- HERO --- */
 .hero {

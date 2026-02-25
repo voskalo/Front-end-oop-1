@@ -66,7 +66,8 @@
 </head>
 <body>
     <header>
-        <nav class="top-nav">
+
+        <!-- <nav class="top-nav">
             <a href="index.html" class="logo">MovieMatch</a>
 
             <ul class="nav-links">
@@ -75,11 +76,11 @@
                 <li><a href="#contacts">Contacts</a></li>
             </ul>
 
-            <!-- Права частина навігації — міняється залежно від стану входу -->
+            Права частина навігації — міняється залежно від стану входу
             <div class="auth-lang" id="nav-right">
-                <!-- Заповнюється через JS нижче -->
+                <! Заповнюється через JS нижче -->
             </div>
-        </nav>
+        <!-- </nav>
 
         <nav class="sub-nav">
             <a href="index.html">Movies</a>
@@ -90,8 +91,20 @@
             <a href="development.html">Playlists</a>
             <a href="development.html">Show</a>
             <a href="development.html">TV shows</a>
-        </nav>
+        </nav> -->
     </header>
+
+
+    <!-- <section class="hero-section">
+        <div class="main-search">
+            <h1>Find Your Best Movie</h1>
+            <div class="search-box">
+                <input type="text" placeholder="Search movies...">
+                </div>
+        </div>
+    </section> -->
+
+    <script src="header.js"></script>
 
     <section class="hero">
         <div class="hero-content">
@@ -289,5 +302,6 @@
         renderContacts();
         fetchMovies();
     </script>
+
 </body>
 </html>

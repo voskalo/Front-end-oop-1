@@ -1,56 +1,55 @@
 function renderHeader() {
-    const header = document.createElement('header');
     const token = localStorage.getItem('token');
-    const username = localStorage.getItem('username') || 'Користувач';
+    const username = localStorage.getItem('username') || 'User';
+    const headerElement = document.querySelector('header');
 
-    // Спільна частина логотипу
-    let navContent = `
+    if (!headerElement) return;
+
+    headerElement.innerHTML = `
         <nav class="top-nav">
-            <a href="index.html" class="logo">MovieMatch</a>
+            <div class="logo">
+                <a href="index.html">MovieMatch</a>
+            </div>
             <ul class="nav-links">
                 <li><a href="index.html#popular">Popular</a></li>
                 <li><a href="index.html#about">About</a></li>
                 <li><a href="index.html#contacts">Contacts</a></li>
+                ${token ? '<li><a href="profile.html">Friends</a></li>' : ''}
+                ${token ? '<li><a href="my_films.html">My Collection</a></li>' : ''}
+                ${ token ? '<li><a href="search_friends.html" ">Search Friends</a></li>' : '' }
             </ul>
+            <div class="auth-lang">
+                ${token ? `
+                    <div class="user-profile">
+                        <span class="username">${username}</span>
+                        <button onclick="handleSignOut()" class="btn-signout">Sign Out</button>
+                    </div>
+                ` : `
+                    <a href="login.html" class="btn-login">Login</a>
+                `}
+            </div>
+        </nav>
+        <nav class="sub-nav">
+            <a href="index.html">Movies</a>
+            <a href="development.html">Books</a>
+            <a href="development.html">Cartoons</a>
+            <a href="development.html">Audiobooks</a>
+            <a href="development.html">Podcasts</a>
+            <a href="development.html">Playlists</a>
+            <a href="development.html">Show</a>
+            <a href="development.html">TV shows</a>
+        </nav>
     `;
-
-    if (token) {
-        // Шапка для ЗАЛОГІНЕНОГО користувача
-        navContent += `
-            <div class="user-menu" style="display: flex; align-items: center; gap: 15px;">
-                <a href="my_films.html" style="color: white; text-decoration: none;">My Collection</a>
-                <a href="profile.html" style="color: white; text-decoration: none;">Friends</a>
-                <div class="user-info" style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-weight: bold;">${username}</span>
-                    <div class="avatar" style="width: 35px; height: 35px; background-color: var(--accent-pink); border-radius: 50%;"></div>
-                </div>
-                <button onclick="logout()" class="btn-alt" style="padding: 5px 15px; cursor: pointer;">Exit</button>
-            </div>
-        `;
-    } else {
-        // Шапка для НЕЗАЛОГІНЕНОГО користувача
-        navContent += `
-            <div class="auth-buttons" style="display: flex; gap: 10px;">
-                <a href="login.html" class="btn-alt" style="text-decoration: none; padding: 8px 20px;">Log In</a>
-                <a href="signup.html" class="btn-main" style="text-decoration: none; padding: 8px 20px; background: var(--accent-pink); border-radius: 20px;">Sign Up</a>
-            </div>
-        `;
-    }
-
-    navContent += `</nav>`;
-    header.innerHTML = navContent;
-
-    // Вставляємо на початок body
-    document.body.prepend(header);
 }
 
-// Функція виходу
-function logout() {
+function handleSignOut() {
     localStorage.removeItem('token');
-    localStorage.removeItem('userId');
     localStorage.removeItem('username');
     window.location.href = 'index.html';
 }
 
-// Запуск при завантаженні сторінки
 document.addEventListener('DOMContentLoaded', renderHeader);
+
+
+
+
