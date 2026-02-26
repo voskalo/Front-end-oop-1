@@ -10,7 +10,6 @@
             max-width: 800px;
             margin: 50px auto;
             padding: 20px;
-            text-align: center;
         }
 
         .search-box {
@@ -29,10 +28,9 @@
             font-size: 1.1rem;
             outline: none;
         }
-
         .search-input:focus {
             border-color: var(--accent-pink);
-            box-shadow: 0 0 10px rgba(184, 59, 136, 0.3);
+            box-shadow: 0 0 10px rgba(184,59,136,0.3);
         }
 
         .results-grid {
@@ -51,33 +49,25 @@
             transition: 0.3s;
             border: 1px solid rgba(255,255,255,0.05);
         }
+        .user-card:hover { transform:translateY(-3px); border-color:var(--accent-pink); }
 
-        .user-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-pink);
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: var(--accent-pink);
-            border-radius: 50%;
-        }
+        .user-avatar { width:50px; height:50px; background:var(--accent-pink); border-radius:50%; flex-shrink:0; }
 
         .btn-add {
             margin-left: auto;
             background: transparent;
             border: 1px solid var(--accent-pink);
             color: white;
-            padding: 5px 15px;
+            padding: 6px 16px;
             border-radius: 15px;
             cursor: pointer;
             transition: 0.3s;
+            white-space: nowrap;
         }
+        .btn-add:hover:not(:disabled)  { background: var(--accent-pink); }
+        .btn-add:disabled { opacity:0.5; cursor:default; }
 
-        .btn-add:hover {
-            background: var(--accent-pink);
-        }
+        .status-msg { color:var(--text-sec); text-align:center; padding:20px 0; }
     </style>
 </head>
 <body>
@@ -85,62 +75,115 @@
         <nav class="top-nav">
             <a href="index.html" class="logo">MovieMatch</a>
             <ul class="nav-links">
-                <li><a href="friends.html">Friends</a></li>
+                <li><a href="profile.html">Friends</a></li>
                 <li><a href="my_films.html">My Collection</a></li>
+                <li><a href="search_friends.html" style="color:var(--accent-pink);">Search Friends</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="search-container">
-        <h1 style="margin-bottom: 20px;">Find New Friends</h1>
+        <h1 style="margin-bottom:25px;">Find New Friends</h1>
+
         <div class="search-box">
-            <input type="text" id="searchInput" class="search-input" placeholder="Enter nickname...">
-            <button onclick="performSearch()" class="btn-choose" style="padding: 10px 30px;">Search</button>
+            <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Enter nickname..."
+            >
+            <button onclick="performSearch()" class="btn-choose" style="padding:10px 30px;">
+                Search
+            </button>
         </div>
 
-        <div id="results" class="results-grid">
-            </div>
+        <div id="results"></div>
     </div>
 
     <script>
+        const BASE_URL = 'http://127.0.0.1:8000';
+
         async function performSearch() {
-            const query = document.getElementById('searchInput').value;
+            const query = document.getElementById('searchInput').value.trim();
             const resultsDiv = document.getElementById('results');
 
             if (!query) return;
 
-            resultsDiv.innerHTML = '<p>Searching...</p>';
+            resultsDiv.innerHTML = '<p class="status-msg">Searching...</p>';
 
             try {
-                const response = await fetch(`http://127.0.0.1:5000/api/search-friends?query=${query}`);
+                // GET /users/search?query=... — пошук юзерів по нікнейму
+                const response = await fetch(
+                    `${BASE_URL}/users/search?query=${encodeURIComponent(query)}`
+                );
                 const users = await response.json();
 
-                resultsDiv.innerHTML = '';
-
-                if (users.length === 0) {
-                    resultsDiv.innerHTML = '<p>No users found.</p>';
+                if (!users.length) {
+                    resultsDiv.innerHTML = '<p class="status-msg">No users found.</p>';
                     return;
                 }
+
+                resultsDiv.innerHTML = '';
+                const grid = document.createElement('div');
+                grid.className = 'results-grid';
 
                 users.forEach(user => {
                     const card = document.createElement('div');
                     card.className = 'user-card';
                     card.innerHTML = `
                         <div class="user-avatar"></div>
-                        <div style="text-align: left;">
-                            <div style="font-weight: bold;">${user.username}</div>
+                        <div>
+                            <div style="font-weight:bold;">${user.username}</div>
+                            <div style="font-size:0.8rem; color:var(--text-sec);">ID: ${user.id}</div>
                         </div>
-                        <button class="btn-add">Add</button>
-                    `;
-                    resultsDiv.appendChild(card);
+                        <button class="btn-add" id="btn-${user.id}" onclick="addFriend(${user.id})">
+                            Add
+                        </button>`;
+                    grid.appendChild(card);
                 });
+
+                resultsDiv.appendChild(grid);
+
             } catch (error) {
-                console.error("Search error:", error);
-                resultsDiv.innerHTML = '<p style="color: red;">Server error</p>';
+                console.error('Search error:', error);
+                resultsDiv.innerHTML = '<p style="color:red;">Server error.</p>';
             }
         }
 
-        // Пошук при натисканні Enter
+        async function addFriend(friendId) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please log in first!');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const btn = document.getElementById(`btn-${friendId}`);
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            try {
+                // POST /users/friends/request/{friend_id} — надіслати запит дружби
+                const resp = await fetch(`${BASE_URL}/users/friends/request/${friendId}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (resp.ok || resp.status === 201) {
+                    btn.textContent = 'Sent ✓';
+                } else {
+                    const data = await resp.json();
+                    btn.textContent = 'Add';
+                    btn.disabled = false;
+                    alert(data.detail || 'Error sending request');
+                }
+            } catch (e) {
+                btn.textContent = 'Add';
+                btn.disabled = false;
+                alert('Server error');
+            }
+        }
+
         document.getElementById('searchInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') performSearch();
         });

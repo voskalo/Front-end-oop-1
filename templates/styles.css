@@ -1,0 +1,112 @@
+/* Базові налаштування */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0d122b; /* Темно-синій фон */
+    color: white;
+}
+
+/* Навігація */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 60px;
+    align-items: center;
+}
+
+.nav-right a, .lang-switch {
+    margin-left: 30px;
+    text-decoration: none;
+    color: #ccc;
+    font-size: 14px;
+}
+
+/* Картка авторизації */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 80px);
+}
+
+.auth-card {
+    background-color: #35254e; /* Пурпуровий фон з макету */
+    padding: 60px 80px;
+    border-radius: 50px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.auth-card h1 {
+    font-size: 42px;
+    font-weight: normal;
+    margin-bottom: 40px;
+}
+
+/* Поля вводу */
+.input-group {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #ddd;
+}
+
+.input-group input {
+    width: 100%;
+    background-color: #d1d1d1;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+/* Кнопки */
+.auth-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.btn-primary {
+    background-color: #8b3d7d; /* Рожево-пурпурний */
+    color: white;
+    border: none;
+    padding: 12px 50px;
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-secondary {
+    background-color: #8b3d7d;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    opacity: 0.8;
+}
+
+/* Стиль для сторінки успіху */
+.success-icon {
+    font-size: 80px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}

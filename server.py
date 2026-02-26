@@ -1,81 +1,52 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import json
-import os
+import datetime
 
-app = Flask(__name__)
-CORS(app)
+app = FastAPI()
 
-DB_FILE = 'users_data.json'
+# Налаштування CORS: дозволяє запити з будь-якого джерела (важливо для розробки)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Змінено відповідно до твоєї схеми
-@app.route('/user/registration', methods=['POST'])
-def register_user():
+# Шлях для реєстрації (як у вашому JS: /user/registration)
+@app.post("/user/registration")
+async def register_user(request: Request):
     try:
-        user_data = request.json
-        # Очікуємо username та password згідно зі схемою
-        username = user_data.get('username')
-        password = user_data.get('password')
+        # Отримуємо дані з JSON-тіла запиту
+        data = await request.json()
+
+        username = data.get("username")
+        password = data.get("password")
 
         if not username or not password:
-            return jsonify({"status": "error", "message": "Missing fields"}), 400
+            raise HTTPException(status_code=400, detail="Missing username or password")
 
-        if os.path.exists(DB_FILE):
-            with open(DB_FILE, 'r', encoding='utf-8') as f:
-                data_list = json.load(f)
-        else:
-            data_list = []
-
-        data_list.append({
+        # Формуємо запис
+        log_entry = {
+            "timestamp": str(datetime.datetime.now()),
             "username": username,
             "password": password
-        })
+        }
 
-        with open(DB_FILE, 'w', encoding='utf-8') as f:
-            json.dump(data_list, f, ensure_ascii=False, indent=4)
+        # Зберігаємо в файл (режим "a" - додавання в кінець)
+        with open("data/database.json", "a", encoding="utf-8") as f:
+            f.write(json.dumps(log_entry) + "\n")
 
-        return jsonify({"status": "success", "message": "User registered"}), 201
+        print(f"DEBUG: New user registered: {username}")
+
+        return {"status": "success", "message": f"User {username} saved!"}
 
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        print(f"ERROR: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
-
-@app.route('/movies', methods=['GET'])
-def get_movies():
-    try:
-        with open('movies.json', 'r', encoding='utf-8') as f:
-            movies = json.load(f)
-        return jsonify(movies)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route('/api/search-friends', methods=['GET'])
-def search_friends():
-    query = request.args.get('query', '').lower()
-    if not query:
-        return jsonify([])
-
-    try:
-        if os.path.exists(DB_FILE):
-            with open(DB_FILE, 'r', encoding='utf-8') as f:
-                users = json.load(f)
-
-            # Шукаємо користувачів, чиє ім'я містить запит (ігноруючи паролі)
-            results = [
-                {"username": u['username']}
-                for u in users
-                if query in u['username'].lower()
-            ]
-            return jsonify(results)
-        return jsonify([])
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-
-
-
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+if __name__ == "__main__":
+    import uvicorn
+    # Запускаємо на порту 5000, як вказано у вашому JS
+    uvicorn.run(app, host="127.0.0.1", port=5000)

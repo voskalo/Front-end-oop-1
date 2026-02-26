@@ -11,7 +11,6 @@
             justify-content: center;
             align-items: center;
             min-height: calc(100vh - 80px);
-            /* padding: 40px; */
             perspective: 1500px;
             overflow: hidden;
         }
@@ -32,7 +31,6 @@
             position: relative;
         }
 
-        /* Клас для центрування фінального екрану */
         .movie-card-big.finished {
             flex-direction: column;
             justify-content: center;
@@ -40,137 +38,485 @@
             text-align: center;
         }
 
-        /* Tinder Анімації */
-        .swipe-like { transform: translateX(200%) rotate(45deg) !important; opacity: 0 !important; }
-        .swipe-dislike { transform: translateX(-200%) rotate(-45deg) !important; opacity: 0 !important; }
-        .new-card-anim { animation: fadeInScale 0.5s ease-out; }
+        /* Свайп анімації */
+        .swipe-like    { transform: translateX(200%) rotate(30deg) !important; opacity: 0 !important; }
+        .swipe-dislike { transform: translateX(-200%) rotate(-30deg) !important; opacity: 0 !important; }
+        .new-card-anim { animation: fadeInScale 0.4s ease-out; }
 
         @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.92); }
+            to   { opacity: 1; transform: scale(1); }
         }
 
-        .col-side { flex: 1; color: var(--text-sec); font-size: 1.1rem; line-height: 1.7; display: flex; flex-direction: column; justify-content: center; }
-        .col-center { flex: 1.2; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        /* Підказка LIKE / NOPE */
+        .swipe-label {
+            position: absolute;
+            top: 40px;
+            font-size: 2.5rem;
+            font-weight: 900;
+            border: 4px solid;
+            padding: 8px 20px;
+            border-radius: 12px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10;
+            transition: opacity 0.15s;
+        }
+        .label-like    { left: 40px;  color: #2ecc71; border-color: #2ecc71; transform: rotate(-15deg); }
+        .label-dislike { right: 40px; color: #e74c3c; border-color: #e74c3c; transform: rotate(15deg); }
+        .show-like    .label-like    { opacity: 1; }
+        .show-dislike .label-dislike { opacity: 1; }
+
+        /* Колонки */
+        .col-side {
+            flex: 1;
+            color: var(--text-sec);
+            font-size: 1rem;
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .col-center {
+            flex: 1.2;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
         .movie-main-img {
             width: 100%;
-            max-width: 380px;
+            max-width: 340px;
             aspect-ratio: 2/3;
             object-fit: cover;
             border-radius: 25px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
 
-        #movie-title { font-size: 2.5rem; margin-bottom: 20px; color: white; font-weight: 800; }
-        .controls { display: flex; justify-content: center; gap: 30px; margin-top: 20px; }
+        #movie-title {
+            font-size: 2rem;
+            margin-bottom: 6px;
+            color: white;
+            font-weight: 800;
+        }
+
+        .movie-meta {
+            color: var(--text-sec);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
 
         .btn-circle {
-            width: 75px; height: 75px; border-radius: 50%; border: none; cursor: pointer;
-            font-size: 30px; display: flex; align-items: center; justify-content: center;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: white;
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: white;
         }
         .btn-dislike { background: #4a4a6a; }
-        .btn-like { background: var(--accent-pink); }
-        .btn-circle:hover { transform: scale(1.15); }
+        .btn-like    { background: var(--accent-pink); }
+        .btn-circle:hover  { transform: scale(1.15); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+        .btn-circle:active { transform: scale(0.95); }
 
-        .actors-list { list-style: none; padding: 0; }
-        .actors-list li { margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
-        .dot { color: var(--accent-pink); font-size: 1.5rem; }
+        /* Блоки правої колонки */
+        .info-block { margin-bottom: 28px; }
+        .info-label {
+            color: white;
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+
+        .genre-tag {
+            display: inline-block;
+            background: rgba(184, 59, 136, 0.2);
+            border: 1px solid rgba(184, 59, 136, 0.5);
+            color: var(--accent-pink);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            margin: 3px 3px 3px 0;
+        }
+
+        .rating-bar-wrap {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 8px;
+        }
+        .rating-bar-fill {
+            height: 8px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent-pink), #ff9a9e);
+            transition: width 0.5s ease;
+        }
+
+        .auth-hint {
+            margin-top: 12px;
+            font-size: 0.82rem;
+            color: var(--text-sec);
+        }
+        .auth-hint a { color: var(--accent-pink); text-decoration: none; }
+
+        .counter {
+            position: absolute;
+            top: -38px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-sec);
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #2ecc71;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        .toast.show  { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.error { background: #e74c3c; }
     </style>
 </head>
 <body>
+
     <header>
-        <nav style="background: #0a0a0e; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; font-size: 1.5rem;">MovieMatch</a>
-            <div style="color: white; display: flex; align-items: center; gap: 10px;">
-                <span>You</span>
-                <div style="width: 35px; height: 35px; background: var(--accent-pink); border-radius: 50%;"></div>
+        <nav style="background:#0a0a0e; padding:15px 40px; display:flex; justify-content:space-between; align-items:center;">
+            <a href="index.html" style="color:white; text-decoration:none; font-weight:bold; font-size:1.5rem;">MovieMatch</a>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <span id="nav-username" style="color:var(--text-sec);"></span>
+                <div style="width:35px; height:35px; background:var(--accent-pink); border-radius:50%;"></div>
             </div>
         </nav>
     </header>
 
     <div class="choose-wrapper">
         <div class="movie-card-big" id="main-card">
+
+            <!-- Підказки при свайпі -->
+            <div class="swipe-label label-like">LIKE</div>
+            <div class="swipe-label label-dislike">NOPE</div>
+
+            <!-- Лічильник -->
+            <div class="counter" id="counter"></div>
+
+            <!-- Лівий стовпець: опис -->
             <div class="col-side" id="left-col">
-                <h3 style="color: white; margin-bottom: 20px;">Overview</h3>
-                <p id="movie-desc">Завантаження...</p>
+                <div class="info-label">Overview</div>
+                <p id="movie-desc">Loading...</p>
             </div>
 
+            <!-- Центральний стовпець: постер + кнопки -->
             <div class="col-center" id="center-col">
                 <img src="" alt="" class="movie-main-img" id="movie-img">
-                <h2 id="movie-title">Title</h2>
-                <div class="controls" id="movie-controls">
-                    <button class="btn-circle btn-dislike" onclick="handleSwipe('dislike')">✖</button>
-                    <button class="btn-circle btn-like" onclick="handleSwipe('like')">❤</button>
+                <h2 id="movie-title">—</h2>
+                <div class="movie-meta" id="movie-meta"></div>
+                <div class="controls">
+                    <button class="btn-circle btn-dislike" onclick="handleSwipe('dislike')" title="Skip (←)">✖</button>
+                    <button class="btn-circle btn-like"    onclick="handleSwipe('like')"    title="Like (→)">❤</button>
+                </div>
+                <p class="auth-hint" id="auth-hint" style="display:none;">
+                    <a href="login.html">Log in</a> to save liked movies
+                </p>
+            </div>
+
+            <!-- Правий стовпець: жанри, рейтинг, дата -->
+            <div class="col-side" id="right-col">
+                <div class="info-block">
+                    <div class="info-label">Genres</div>
+                    <div id="movie-genres"></div>
+                </div>
+                <div class="info-block">
+                    <div class="info-label">Rating</div>
+                    <div id="movie-rating" style="color:white; font-size:1.4rem; font-weight:700;">—</div>
+                    <div class="rating-bar-wrap">
+                        <div class="rating-bar-fill" id="rating-bar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="info-block">
+                    <div class="info-label">Release Date</div>
+                    <div id="movie-date" style="color:white; font-size:1rem;"></div>
                 </div>
             </div>
 
-            <div class="col-side" id="right-col">
-                <h3 style="color: white; margin-bottom: 20px;">Top Cast</h3>
-                <ul id="movie-actors" class="actors-list"></ul>
-            </div>
         </div>
     </div>
 
-    <script>
-        let movies = [];
-        let index = 0;
+    <div class="toast" id="toast"></div>
 
-        async function fetchMovies() {
+    <script>
+        const BASE_URL = 'http://127.0.0.1:8000';
+
+        let movies      = [];
+        let index       = 0;
+        let isSwiping   = false;  // блокуємо подвійний клік
+        let currentPage = 1;      // поточна сторінка TMDB
+        let totalPages  = 1;      // всього сторінок (з відповіді TMDB)
+        let isLoading   = false;  // блокуємо подвійне підвантаження
+
+        // Показуємо ім'я якщо залогінений
+        const token    = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+
+        if (username) {
+            document.getElementById('nav-username').textContent = username;
+        } else {
+            document.getElementById('auth-hint').style.display = 'block';
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 1. Завантаження фільмів з бека
+        // GET /movies/ → { page, results: [...], total_pages }
+        // ─────────────────────────────────────────────────────
+        // Перемішуємо масив випадково (Fisher-Yates shuffle)
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Підвантажуємо нову сторінку фільмів і додаємо до існуючих
+        async function fetchMovies(page = 1) {
+            if (isLoading) return;
+            isLoading = true;
+
             try {
-                const res = await fetch('http://127.0.0.1:5000/movies');
-                movies = await res.json();
-                renderMovie();
+                // Вибираємо випадкову сторінку щоб фільми були різними
+                const randomPage = page === 1
+                    ? Math.floor(Math.random() * 50) + 1  // перший раз — рандомна стор.
+                    : page;
+
+                const res  = await fetch(`${BASE_URL}/movies/?page=${randomPage}`);
+                const data = await res.json();
+
+                totalPages = data.total_pages || 1;
+
+                // Перемішуємо щоб порядок був випадковим
+                const newMovies = shuffle(data.results || []);
+
+                if (!newMovies.length) {
+                    document.getElementById('movie-desc').textContent = 'No movies found.';
+                    isLoading = false;
+                    return;
+                }
+
+                movies = [...movies, ...newMovies];
+                isLoading = false;
+
+                // Показуємо перший фільм тільки при першому завантаженні
+                if (page === 1) renderMovie();
+
             } catch (e) {
-                document.getElementById('movie-desc').innerText = "Сервер не підключено.";
+                isLoading = false;
+                document.getElementById('movie-desc').textContent =
+                    'Could not connect to server.';
             }
         }
 
+        // ─────────────────────────────────────────────────────
+        // 2. Відображення поточного фільму
+        // ─────────────────────────────────────────────────────
         function renderMovie() {
             const card = document.getElementById('main-card');
 
+            // Підвантажуємо наступну сторінку коли залишилось 3 фільми
+            if (index >= movies.length - 3 && !isLoading) {
+                currentPage = Math.floor(Math.random() * 50) + 1;
+                fetchMovies(currentPage);
+            }
+
+            // Якщо фільми ще не підвантажились — показуємо лоадер
             if (index >= movies.length) {
-                // ПОВНЕ ЦЕНТРУВАННЯ ФІНАЛУ
-                card.classList.add('finished');
-                card.innerHTML = `
-                    <div style="animation: fadeInScale 0.5s ease-out;">
-                        <h1 style="color: white; font-size: 3.5rem; margin-bottom: 20px;">That's all for now!</h1>
-                        <p style="color: #a0a0b0; font-size: 1.2rem; margin-bottom: 40px; max-width: 500px;">
-                            That's all of films that we had.
-                        </p>
-                        <a href="index.html" style="text-decoration: none; padding: 15px 40px; background: var(--accent-pink); color: white; border-radius: 30px; font-weight: bold;">
-                            Back to Home
-                        </a>
-                    </div>`;
+                document.getElementById('movie-title').textContent = 'Loading...';
+                document.getElementById('movie-desc').textContent  = 'Fetching new movies...';
+                document.getElementById('movie-img').style.display = 'none';
+                document.getElementById('movie-genres').innerHTML  = '';
+                document.getElementById('movie-rating').textContent = '';
+                document.getElementById('movie-date').textContent   = '';
+                document.getElementById('counter').textContent      = '';
+                // Перевіряємо кожні 500мс поки не з'являться нові фільми
+                setTimeout(() => renderMovie(), 500);
                 return;
             }
 
             const m = movies[index];
-            document.getElementById('movie-title').innerText = m.title;
-            document.getElementById('movie-desc').innerText = m.desc;
-            document.getElementById('movie-img').src = m.img;
-            document.getElementById('movie-actors').innerHTML = m.actors.map(a =>
-                `<li><span class="dot">•</span> ${a}</li>`).join('');
+
+            // Лічильник — скільки переглянуто
+            document.getElementById('counter').textContent =
+                `Viewed: ${index + 1}`;
+
+            // Назва фільму
+            document.getElementById('movie-title').textContent =
+                m.title || m.original_title || 'Unknown';
+
+            // Опис
+            document.getElementById('movie-desc').textContent =
+                m.overview || 'No description available.';
+
+            // Постер — poster_url вже повний URL сформований беком
+            const img = document.getElementById('movie-img');
+            if (m.poster_url) {
+                img.src             = m.poster_url;
+                img.alt             = m.title || '';
+                img.style.display   = 'block';
+            } else {
+                img.style.display = 'none';
+            }
+
+            // Рейтинг (0–10 → показуємо з зіркою)
+            const avg = m.vote_average;
+            if (avg && avg > 0) {
+                document.getElementById('movie-rating').textContent = `★ ${avg.toFixed(1)} / 10`;
+                document.getElementById('rating-bar').style.width   = `${avg * 10}%`;
+            } else {
+                document.getElementById('movie-rating').textContent = 'No ratings yet';
+                document.getElementById('rating-bar').style.width   = '0%';
+            }
+
+            // Дата виходу
+            document.getElementById('movie-date').textContent =
+                m.release_date || '—';
+
+            // Жанри — genres_str масив: ["Action", "Drama"]
+            const genres = m.genres_str || [];
+            document.getElementById('movie-genres').innerHTML = genres.length
+                ? genres.map(g => `<span class="genre-tag">${g}</span>`).join('')
+                : '<span style="color:var(--text-sec)">—</span>';
         }
 
-        function handleSwipe(type) {
-            const card = document.getElementById('main-card');
-            if (!movies[index]) return;
+        // ─────────────────────────────────────────────────────
+        // 3. Обробка свайпу (like / dislike)
+        // ─────────────────────────────────────────────────────
+        async function handleSwipe(type) {
+            // Блокуємо якщо вже йде анімація або фільмів немає
+            if (isSwiping || !movies[index]) return;
+            isSwiping = true;
 
-            // Просто додаємо анімацію і змінюємо індекс (без запитів до JSON)
+            const card = document.getElementById('main-card');
+
+            // Показуємо підказку LIKE або NOPE
+            card.classList.add(type === 'like' ? 'show-like' : 'show-dislike');
+
+            // Якщо лайк — зберігаємо в базу даних у фоні (без await)
+            // Не блокуємо анімацію — запит іде паралельно
+            if (type === 'like') {
+                saveLike(movies[index]);
+            }
+
+            // Анімація вильоту
             card.classList.add(type === 'like' ? 'swipe-like' : 'swipe-dislike');
 
+            // Після анімації — показуємо наступний фільм
             setTimeout(() => {
                 index++;
-                card.classList.remove('swipe-like', 'swipe-dislike');
+
+                card.classList.remove(
+                    'swipe-like', 'swipe-dislike',
+                    'show-like',  'show-dislike'
+                );
                 card.classList.add('new-card-anim');
                 renderMovie();
-                setTimeout(() => card.classList.remove('new-card-anim'), 500);
+
+                setTimeout(() => {
+                    card.classList.remove('new-card-anim');
+                    isSwiping = false;
+                }, 400);
+
             }, 500);
         }
 
+        // ─────────────────────────────────────────────────────
+        // 4. Збереження лайку в базу даних
+        // POST /movies/like-movie
+        // Бек очікує: { id, poster_path, movie_name }
+        // ─────────────────────────────────────────────────────
+        async function saveLike(movie) {
+            // Якщо не залогінений — просто пропускаємо (не блокуємо свайп)
+            if (!token) return;
+
+            try {
+                const resp = await fetch(`${BASE_URL}/movies/like-movie`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        id:           movie.id,
+                        movie_name:   movie.title || movie.original_title || 'Unknown',
+                        poster_path:  movie.poster_path  || null,
+                        poster_url:   movie.poster_url   || null,
+                        overview:     movie.overview     || null,
+                        release_date: movie.release_date || null,
+                        vote_average: movie.vote_average || null
+                    })
+                });
+
+                if (resp.ok) {
+                    const data = await resp.json();
+                    // "Movie added to favorites" або "Movie already in favorites"
+                    showToast('❤ ' + (data.message || 'Saved!'));
+                } else if (resp.status === 401) {
+                    localStorage.removeItem('token');
+                    showToast('Session expired. Please log in again.', true);
+                }
+
+            } catch (e) {
+                // Мережева помилка — мовчки логуємо, не блокуємо свайп
+                console.error('saveLike error:', e);
+            }
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 5. Toast сповіщення
+        // ─────────────────────────────────────────────────────
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className   = 'toast show' + (isError ? ' error' : '');
+            setTimeout(() => { toast.className = 'toast'; }, 2500);
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 6. Клавіатура: стрілки для свайпу
+        // ─────────────────────────────────────────────────────
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') handleSwipe('like');
+            if (e.key === 'ArrowLeft')  handleSwipe('dislike');
+        });
+
+        // Старт
         fetchMovies();
     </script>
 </body>
